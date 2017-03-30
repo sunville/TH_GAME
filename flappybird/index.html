@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Flappy Bird Workshop</title>
+    <script src="resource_load.js"></script>
+    <script src="birds.js"></script>
+    <script src="sky.js"></script>
+    <script src="land.js"></script>
+    <script src="pipe.js"></script>
+</head>
+
+<body>
+    <canvas id="cvs" width="800" height="600"></canvas>
+<script>
+    var imglist = [
+        {
+            "name": "birds"
+            , "src": "imgs/spritesheet.png"
+        },
+        {
+            "name": "daybg"
+            , "src": "imgs/flappybird/bg_day.png"
+        },
+        {
+            "name": "nightbg"
+            , "src": "imgs/flappybird/bg_night.png"
+        },
+        {
+            "name": "pipedown"
+            , "src": "imgs/flappybird/pipe_up.png"
+        },
+        {
+            "name": "pipeup"
+            , "src": "imgs/flappybird/pipe_down.png"
+        }
+        ,
+        {
+            "name": "land"
+            , "src": "imgs/flappybird/land.png"
+        }
+    ];
+    var cvs = document.getElementById("cvs");
+    var ctx = cvs.getContext("2d");
+    //ensure all imgs have been loaded
+    load(imglist, function (imgEls) {
+        //主循环
+        var bird = new Bird(imgEls["birds"], 150, 100, 0.0003, 0.0006, ctx);
+        var sky1 = new Sky(imgEls["daybg"], 0, -0.3, ctx);
+        var sky2 = new Sky(imgEls["daybg"], 800, -0.3, ctx);
+        var land1 = new Land(imgEls["land"], 0, -0.3, ctx);
+        var land2 = new Land(imgEls["land"], 336*1, -0.3, ctx);
+        var land3 = new Land(imgEls["land"], 336*2, -0.3, ctx);
+        var land4 = new Land(imgEls["land"], 336*3, -0.3, ctx);
+        var pipe1 = new Pipe(imgEls["pipeup"], imgEls["pipedown"], 400, -0.1, ctx);
+        var pipe2 = new Pipe(imgEls["pipeup"], imgEls["pipedown"], 600, -0.1, ctx);
+        var pipe3 = new Pipe(imgEls["pipeup"], imgEls["pipedown"], 800, -0.1, ctx);
+        var pipe4 = new Pipe(imgEls["pipeup"], imgEls["pipedown"], 1000, -0.1, ctx);
+        var pipe5 = new Pipe(imgEls["pipeup"], imgEls["pipedown"], 1200, -0.1, ctx);
+        
+        pipe1.setCount(5,200);
+        sky1.setCount(2);
+        land1.setCount(4);
+        //main loop
+        var preTime = Date.now();
+        function run() {
+            var now = Date.now();
+            dt = now - preTime;
+            preTime = now;
+            ctx.clearRect(0, 0, 800, 600);
+            //draw 
+            sky1.update(dt);
+            sky1.draw();
+            sky2.update(dt);
+            sky2.draw();
+    
+            land1.update(dt);
+            land1.draw();
+            land2.update(dt);
+            land2.draw();
+            land3.update(dt);
+            land3.draw();
+            land4.update(dt);
+            land4.draw();
+            
+            pipe1.update(dt);
+            pipe1.draw();
+            pipe2.update(dt);
+            pipe2.draw();
+            pipe3.update(dt);
+            pipe3.draw();
+            pipe4.update(dt);
+            pipe4.draw();
+            pipe5.update(dt);
+            pipe5.draw();
+            
+            bird.update(dt);
+            bird.draw();
+            //---------
+            var gameover = false;
+            gameover = gameover || pipe1.hitCheck(bird.x,bird.y);
+            gameover = gameover || pipe2.hitCheck(bird.x,bird.y);
+            gameover = gameover || pipe3.hitCheck(bird.x,bird.y);
+            gameover = gameover || pipe4.hitCheck(bird.x,bird.y);
+            gameover = gameover || pipe5.hitCheck(bird.x,bird.y);
+            
+            if(bird.y < 0 || bird.y > 440){
+                gameover = true;
+            }
+            
+            if(!gameover){
+                requestAnimationFrame(run);
+            }
+        }
+        requestAnimationFrame(run);
+        cvs.addEventListener("click", function() {
+            bird.speed = -0.3;                     
+        })
+    })
+</script>
+</body>
+</html>
