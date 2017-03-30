@@ -43,6 +43,7 @@
     ];
     var cvs = document.getElementById("cvs");
     var ctx = cvs.getContext("2d");
+    
     //ensure all imgs have been loaded
     load(imglist, function (imgEls) {
         //主循环
@@ -53,11 +54,11 @@
         var land2 = new Land(imgEls["land"], 336*1, -0.3, ctx);
         var land3 = new Land(imgEls["land"], 336*2, -0.3, ctx);
         var land4 = new Land(imgEls["land"], 336*3, -0.3, ctx);
-        var pipe1 = new Pipe(imgEls["pipeup"], imgEls["pipedown"], 400, -0.1, ctx);
-        var pipe2 = new Pipe(imgEls["pipeup"], imgEls["pipedown"], 600, -0.1, ctx);
-        var pipe3 = new Pipe(imgEls["pipeup"], imgEls["pipedown"], 800, -0.1, ctx);
-        var pipe4 = new Pipe(imgEls["pipeup"], imgEls["pipedown"], 1000, -0.1, ctx);
-        var pipe5 = new Pipe(imgEls["pipeup"], imgEls["pipedown"], 1200, -0.1, ctx);
+        var pipe1 = new Pipe(imgEls["pipeup"], imgEls["pipedown"], 400, -0.2, ctx);
+        var pipe2 = new Pipe(imgEls["pipeup"], imgEls["pipedown"], 600, -0.2, ctx);
+        var pipe3 = new Pipe(imgEls["pipeup"], imgEls["pipedown"], 800, -0.2, ctx);
+        var pipe4 = new Pipe(imgEls["pipeup"], imgEls["pipedown"], 1000, -0.2, ctx);
+        var pipe5 = new Pipe(imgEls["pipeup"], imgEls["pipedown"], 1200, -0.2, ctx);
         
         pipe1.setCount(5,200);
         sky1.setCount(2);
@@ -112,11 +113,17 @@
             if(!gameover){
                 requestAnimationFrame(run);
             }
-        }
-        requestAnimationFrame(run);
-        cvs.addEventListener("click", function() {
+            document.addEventListener("click", function() {
             bird.speed = -0.3;                     
         })
+    document.addEventListener("keydown", keyDownHandle, false);
+    function keyDownHandle(e){
+        if(e.keyCode == 32){
+            bird.speed = -0.3;
+        }
+    }
+        }
+        requestAnimationFrame(run);
     })
 </script>
 </body>
